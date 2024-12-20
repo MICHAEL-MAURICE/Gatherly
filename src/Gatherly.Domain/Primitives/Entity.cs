@@ -7,6 +7,7 @@ public abstract class Entity : IEquatable<Entity>
         Id = id;
     }
 
+    //init means that you can assign a value just when you create an object
     public Guid Id { get; private init; }
 
     public static bool operator ==(Entity? first, Entity? second)

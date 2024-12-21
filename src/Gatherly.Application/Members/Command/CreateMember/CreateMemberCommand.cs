@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace Gatherly.Application.Members.Command.CreateMember
 {
-    public sealed record CreateMemberCommand(string Email,string FirstName,string LastName ):IRequest
+    public sealed record CreateMemberCommand(string Email,string FirstName,string LastName ):IRequest;
     
 }

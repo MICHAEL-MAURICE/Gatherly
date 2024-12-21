@@ -1,5 +1,8 @@
 ﻿using Gatherly.Domain.Enums;
+using Gatherly.Domain.Errors;
+using Gatherly.Domain.Exceptions;
 using Gatherly.Domain.Primitives;
+using Gatherly.Domain.Shared;
 
 namespace Gatherly.Domain.Entities;
 
@@ -69,7 +72,7 @@ public sealed class Gathering : Entity
             case GatheringType.WithFixedNumberOfAttendees:
                 if (maximumNumberOfAttendees is null)
                 {
-                    throw new Exception(
+                    throw new GatheringMaximumNumberOfAttendeesIsNullDomainException(
                         $"{nameof(maximumNumberOfAttendees)} can't be null.");
                 }
 
@@ -78,7 +81,7 @@ public sealed class Gathering : Entity
             case GatheringType.WithExpirationForInvitations:
                 if (invitationsValidBeforeInHours is null)
                 {
-                    throw new Exception(
+                    throw new GatheringInvitationsValidBeforeInHoursIsNullDomainException(
                         $"{nameof(invitationsValidBeforeInHours)} can't be null.");
                 }
 
@@ -92,17 +95,18 @@ public sealed class Gathering : Entity
         return gathering;
     }
 
-    public Invitation SendInvitation(Member member)
+    public Result<Invitation> SendInvitation(Member member)
     {
         // Validate
         if (Creator.Id == member.Id)
         {
-            throw new Exception("Can't send invitation to the gathering creator.");
+            return Result.Failure<Invitation>(DomainErrors.Gathering.InvitingCreator);
+
         }
 
         if (ScheduledAtUtc < DateTime.UtcNow)
         {
-            throw new Exception("Can't send invitation for gathering in the past.");
+            return Result.Failure<Invitation>(DomainErrors.Gathering.AlreadyPassed);
         }
 
         var invitation = new Invitation(Guid.NewGuid(), member, this);

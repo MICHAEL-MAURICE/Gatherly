@@ -1,8 +1,4 @@
-﻿
-
-using Gatherly.Domain.Primitives;
-
-namespace Gatherly.Domain.Errors;
+﻿namespace Gatherly.Domain.Primitives;
 
 public abstract class AggregateRoot : Entity
 {

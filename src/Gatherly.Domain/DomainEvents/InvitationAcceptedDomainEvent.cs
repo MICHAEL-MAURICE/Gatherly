@@ -1,10 +1,7 @@
-﻿
+﻿using Gatherly.Domain.Primitives;
 
-using Gatherly.Domain.Primitives;
+namespace Gatherly.Domain.DomainEvents;
 
-namespace Gatherly.Domain.DomainEvents
+public sealed record InvitationAcceptedDomainEvent(Guid InvitationId, Guid GatheringId) : IDomainEvent
 {
-    public  sealed record  InvitationAcceptedDomainEvent(Guid InvitationId, Guid GatharingId):IDomainEvent
-    {
-    }
 }
